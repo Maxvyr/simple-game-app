@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import GameTable from "./GameTable";
 import SearchCompo from "./SearchCompo";
 
 export default function FilterableGameTable({ games }) {
-  console.log(`FilterableGameTable -> games length : ${games.length}`);
+  const [filterText, setFilterText] = useState("");
+  const [inStockOnly, setInStockOnly] = useState(false);
 
   const onTextInputChange = (value) => {
-    console.log("FilterableGameTable " + value);
+    setFilterText(value);
+    console.log("filterText " + filterText);
   };
 
   const onCheckBoxInputChange = (value) => {
-    console.log("FilterableGameTable " + value);
+    setInStockOnly(value);
+    console.log("inStockOnly " + inStockOnly);
   };
 
   return (
@@ -19,8 +22,14 @@ export default function FilterableGameTable({ games }) {
       <SearchCompo
         onCheckBoxInputChange={onCheckBoxInputChange}
         onTextInputChange={onTextInputChange}
+        filterText={filterText}
+        inStockOnly={inStockOnly}
       />
-      <GameTable games={games} />
+      <GameTable
+        games={games}
+        filterText={filterText}
+        inStockOnly={inStockOnly}
+      />
     </div>
   );
 }

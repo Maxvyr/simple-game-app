@@ -2,12 +2,24 @@ import React from "react";
 import GameCategory from "./GameCategory";
 import GameRow from "./GameRow";
 
-export default function GameTable({ games }) {
-  console.log(`GameTable -> games length : ${games.length}`);
+export default function GameTable({ games, filterText, inStockOnly }) {
+  let lastCategory = "";
 
-  const row = [];
+  const rows = [];
   games.forEach((game) => {
-    row.push(<GameRow key={game.name} game={game} />);
+    if (game.name.toLowerCase().indexOf(filterText) === -1) {
+      //indeOf loop on string a return a value + if find character else return -1
+      // so if === -1 no name so return don't add game
+      return;
+    }
+
+    if (inStockOnly && !game.stocked) return;
+
+    if (game.category !== lastCategory) {
+      rows.push(<GameCategory key={game.category} game={game} />);
+    }
+    rows.push(<GameRow key={game.name} game={game} />);
+    lastCategory = game.category;
   });
 
   return (
@@ -19,9 +31,9 @@ export default function GameTable({ games }) {
             <th>Price</th>
           </tr>
         </thead>
-        {row}
+        {rows}
       </table>
-      <GameCategory />
+      {/* <GameCategory game={games[0].category} /> */}
     </div>
   );
 }
